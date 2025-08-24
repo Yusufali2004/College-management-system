@@ -1,7 +1,7 @@
 //                   COLLEGE MANAGEMNET SYSTEM
 
-#include <windows.h>        //functions of windows API
-#include <unistd.h>         //provides acces to POSIX OS API
+#include <windows.h> //functions of windows API
+#include <unistd.h>  //provides acces to POSIX OS API
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -27,7 +27,7 @@ struct StudentInfo Students[100];
 struct CourseInfo Courses[500];
 
 // some global variables
-int i,j;
+int i, j;
 int TotalStudents = 0;
 int TotalCourse = 0;
 char StudentID[10];
@@ -43,11 +43,11 @@ bool IsRunning = true;
 void Menu();
 void AddNewStudent();
 void ShowAllStudents();
-int  SearchStudent(char StudentID[10]);
+int SearchStudent(char StudentID[10]);
 void EditStudent(int StudentFoundIndex);
 void DeleteStudent(int StudentIndex);
 void DeleteAllStudents();
-int  IsAlreadyExists(char GivenLine[30],char InfoType, char StudentID[300]);
+int IsAlreadyExists(char GivenLine[30], char InfoType, char StudentID[300]);
 void ErrorAndRestart(char *Error[100]);
 void DeleteCourseByIndex(int CourseIndex);
 void DeleteStudentByIndex(int CourseIndex);
@@ -60,12 +60,12 @@ int main()
 {
     DataSeed(); // you can comment this line if not want dummy data
 
-    while(IsRunning)
+    while (IsRunning)
     {
         Menu();
         int Option;
-        scanf("%d",&Option);
-        switch(Option)
+        scanf("%d", &Option);
+        switch (Option)
         {
         case 0:
             IsRunning = false;
@@ -88,9 +88,9 @@ int main()
             system("cls");
             printf("\n\t\t **** Search Students ****\n\n");
             printf(" Enter The Student ID: ");
-            scanf("%s",StudentID);
+            scanf("%s", StudentID);
             int IsFound = SearchStudent(StudentID);
-            if(IsFound<0)
+            if (IsFound < 0)
             {
                 printf(" No Student Found\n\n");
             }
@@ -102,10 +102,10 @@ int main()
             system("cls");
             printf("\n\t\t **** Edit a Student ****\n\n");
             printf(" Enter The Student ID: ");
-            scanf("%s",StudentID);
+            scanf("%s", StudentID);
             int StudentFoundIndex = SearchStudent(StudentID);
 
-            if(StudentFoundIndex>=0)
+            if (StudentFoundIndex >= 0)
             {
                 EditStudent(StudentFoundIndex);
             }
@@ -119,19 +119,19 @@ int main()
             system("cls");
             printf("\n\t\t **** Delete a Student ****\n\n");
             printf(" Enter The Student ID: ");
-            scanf("%s",StudentID);
+            scanf("%s", StudentID);
 
             int DeleteStudentFoundIndex = SearchStudent(StudentID);
 
-            if(DeleteStudentFoundIndex>=0)
+            if (DeleteStudentFoundIndex >= 0)
             {
                 char Sure = 'N';
                 getchar();
                 printf("\n\n");
                 printf(" Are you sure want to delete this student? (Y/N): ");
-                scanf("%c",&Sure);
+                scanf("%c", &Sure);
 
-                if(Sure == 'Y' || Sure == 'y')
+                if (Sure == 'Y' || Sure == 'y')
                 {
                     DeleteStudent(DeleteStudentFoundIndex);
                 }
@@ -140,7 +140,6 @@ int main()
                     printf(" Your Data is Safe.\n\n");
                     GoBackOrExit();
                 }
-
             }
             else
             {
@@ -157,8 +156,8 @@ int main()
             printf("\n\t\t **** Delete ALL Students ****\n\n");
 
             printf(" Are you sure want to delete all the students? (Y/N): ");
-            scanf("%c",&Sure);
-            if(Sure == 'Y' || Sure == 'y')
+            scanf("%c", &Sure);
+            if (Sure == 'Y' || Sure == 'y')
             {
                 DeleteAllStudents();
             }
@@ -178,7 +177,7 @@ int main()
             UserGuideline();
             GoBackOrExit();
             break;
-        
+
         default:
             ExitProject();
             break;
@@ -217,21 +216,21 @@ void AddNewStudent()
     char CourseName[300];
 
     int IsValidID = 0;
-    while(!IsValidID)
+    while (!IsValidID)
     {
         printf(" Enter The ID: ");
-        scanf("%s",&StudentID);
-        if(IsAlreadyExists(StudentID,'i',StudentID) > 0)
+        scanf("%s", &StudentID);
+        if (IsAlreadyExists(StudentID, 'i', StudentID) > 0)
         {
             printf(" Error: This ID is already exists.\n\n");
             IsValidID = 0;
         }
-        else if(strlen(StudentID) > 10)
+        else if (strlen(StudentID) > 10)
         {
             printf(" Error: ID can not be more than 10 characters.\n\n");
             IsValidID = 0;
         }
-        else if(strlen(StudentID) <= 0)
+        else if (strlen(StudentID) <= 0)
         {
             printf(" Error: ID can not be empty.\n\n");
             IsValidID = 0;
@@ -243,16 +242,16 @@ void AddNewStudent()
     }
 
     int IsValidName = 0;
-    while(!IsValidName)
+    while (!IsValidName)
     {
         printf(" Enter The Name: ");
-        scanf(" %[^\n]s",&Name);
-        if(strlen(Name) > 20)
+        scanf(" %[^\n]s", &Name);
+        if (strlen(Name) > 20)
         {
             printf(" Error: Name can not be more than 20 characters.\n\n");
             IsValidName = 0;
         }
-        if(strlen(Name) <= 0)
+        if (strlen(Name) <= 0)
         {
             printf(" Error: Name can not be empty.\n\n");
             IsValidName = 0;
@@ -264,21 +263,21 @@ void AddNewStudent()
     }
 
     int IsValidEmail = 0;
-    while(!IsValidEmail)
+    while (!IsValidEmail)
     {
         printf(" Enter The Email: ");
-        scanf("%s",&Email);
-        if(IsAlreadyExists(Email,'e',StudentID) > 0)
+        scanf("%s", &Email);
+        if (IsAlreadyExists(Email, 'e', StudentID) > 0)
         {
             printf(" This Email is Already Exists.\n");
             IsValidEmail = 0;
         }
-        else if(strlen(Email) > 30)
+        else if (strlen(Email) > 30)
         {
             printf(" Error: Email can not be more than 30 characters.\n\n");
             IsValidEmail = 0;
         }
-        else if(strlen(Email) <= 0)
+        else if (strlen(Email) <= 0)
         {
             printf(" Error: Email can not be empty.\n\n");
             IsValidEmail = 0;
@@ -290,21 +289,21 @@ void AddNewStudent()
     }
 
     int IsValidPhone = 0;
-    while(!IsValidPhone)
+    while (!IsValidPhone)
     {
         printf(" Enter The Phone: ");
-        scanf("%s",&Phone);
-        if(IsAlreadyExists(Phone,'p',StudentID) > 0)
+        scanf("%s", &Phone);
+        if (IsAlreadyExists(Phone, 'p', StudentID) > 0)
         {
             printf(" This Phone Number is Already Exists\n");
             IsValidPhone = 0;
         }
-        else if(strlen(Phone) > 20)
+        else if (strlen(Phone) > 20)
         {
             printf(" Error: Phone number cannot be more than 20 characters.\n\n");
             IsValidPhone = 0;
         }
-        else if(strlen(Phone) <= 0)
+        else if (strlen(Phone) <= 0)
         {
             printf(" Error: Phone can not be empty.\n\n");
             IsValidPhone = 0;
@@ -316,11 +315,11 @@ void AddNewStudent()
     }
 
     int IsValidNumberOfSubject = 0;
-    while(!IsValidNumberOfSubject)
+    while (!IsValidNumberOfSubject)
     {
         printf(" Number of Subjects: ");
-        scanf("%d",&NumberOfSubject);
-        if(NumberOfSubject <= 0 || NumberOfSubject > 4)
+        scanf("%d", &NumberOfSubject);
+        if (NumberOfSubject <= 0 || NumberOfSubject > 4)
         {
             printf(" Error: Number of Subjects can not be more than 4 and lees than 1.\n\n");
             IsValidNumberOfSubject = 0;
@@ -331,25 +330,25 @@ void AddNewStudent()
         }
     }
 
-    strcpy(Students[TotalStudents].ID,StudentID);
-    strcpy(Students[TotalStudents].Name,Name);
-    strcpy(Students[TotalStudents].Phone,Phone);
-    strcpy(Students[TotalStudents].Email,Email);
+    strcpy(Students[TotalStudents].ID, StudentID);
+    strcpy(Students[TotalStudents].Name, Name);
+    strcpy(Students[TotalStudents].Phone, Phone);
+    strcpy(Students[TotalStudents].Email, Email);
     Students[TotalStudents].NumberOfSubject = NumberOfSubject;
     TotalStudents++;
 
-    for(i=0; i<NumberOfSubject; i++)
+    for (i = 0; i < NumberOfSubject; i++)
     {
 
-        printf(" Enter %d Subject Code: ",i+1);
-        scanf("%s",&CourseCode);
+        printf(" Enter %d Subject Code: ", i + 1);
+        scanf("%s", &CourseCode);
 
-        printf(" Enter %d Subject Name: ",i+1);
-        scanf(" %[^\n]s",&CourseName);
+        printf(" Enter %d Subject Name: ", i + 1);
+        scanf(" %[^\n]s", &CourseName);
 
-        strcpy(Courses[TotalCourse].StudentID,StudentID);
-        strcpy(Courses[TotalCourse].Code,CourseCode);
-        strcpy(Courses[TotalCourse].Name,CourseName);
+        strcpy(Courses[TotalCourse].StudentID, StudentID);
+        strcpy(Courses[TotalCourse].Code, CourseCode);
+        strcpy(Courses[TotalCourse].Name, CourseName);
         TotalCourse++;
     }
 
@@ -362,41 +361,40 @@ void ShowAllStudents()
     printf("|    ID    |        Name        |            Email             |       Phone        |  NO.Course  |\n");
     printf("|==========|====================|==============================|====================|=============|\n");
 
-    for(i=0; i<TotalStudents; i++)
+    for (i = 0; i < TotalStudents; i++)
     {
         printf("|");
-        printf("%s",Students[i].ID);
-        for(j=0; j < (10-strlen(Students[i].ID)); j++)
+        printf("%s", Students[i].ID);
+        for (j = 0; j < (10 - strlen(Students[i].ID)); j++)
         {
             printf(" ");
         }
         printf("|");
-        printf("%s",Students[i].Name);
-        for(j=0; j < (20-strlen(Students[i].Name)); j++)
+        printf("%s", Students[i].Name);
+        for (j = 0; j < (20 - strlen(Students[i].Name)); j++)
         {
             printf(" ");
         }
         printf("|");
-        printf("%s",Students[i].Email);
-        for(j=0; j < (30-strlen(Students[i].Email)); j++)
+        printf("%s", Students[i].Email);
+        for (j = 0; j < (30 - strlen(Students[i].Email)); j++)
         {
             printf(" ");
         }
         printf("|");
-        printf("%s",Students[i].Phone);
-        for(j=0; j < (20-strlen(Students[i].Phone)); j++)
+        printf("%s", Students[i].Phone);
+        for (j = 0; j < (20 - strlen(Students[i].Phone)); j++)
         {
             printf(" ");
         }
         printf("|");
-        printf("%d",Students[i].NumberOfSubject);
-        for(j=0; j < 12; j++)
+        printf("%d", Students[i].NumberOfSubject);
+        for (j = 0; j < 12; j++)
         {
             printf(" ");
         }
         printf("|\n");
         printf("|----------|--------------------|------------------------------|--------------------|-------------|\n");
-
     }
     printf("\n");
 }
@@ -407,31 +405,31 @@ int SearchStudent(char StudentID[10])
     int StudentFoundIndex = -1;
 
     int i;
-    for(i=0; i<TotalStudents; i++)
+    for (i = 0; i < TotalStudents; i++)
     {
-        if(strcmp(StudentID,Students[i].ID) == 0)
+        if (strcmp(StudentID, Students[i].ID) == 0)
         {
             StudentFoundIndex = i;
-            printf("\n One Student Found for ID: %s\n\n",StudentID);
+            printf("\n One Student Found for ID: %s\n\n", StudentID);
             printf(" Student Informations\n");
             printf("-------------------------\n");
 
-            printf(" ID:    %s\n",Students[i].ID);
-            printf(" Name:  %s\n",Students[i].Name);
-            printf(" Email: %s\n",Students[i].Email);
-            printf(" Phone: %s\n",Students[i].Phone);
-            printf("\n Total Number of Courses: %d\n",Students[i].NumberOfSubject);
+            printf(" ID:    %s\n", Students[i].ID);
+            printf(" Name:  %s\n", Students[i].Name);
+            printf(" Email: %s\n", Students[i].Email);
+            printf(" Phone: %s\n", Students[i].Phone);
+            printf("\n Total Number of Courses: %d\n", Students[i].NumberOfSubject);
         }
     }
     int CourseCount = 0;
     int j;
-    for(j=0; j<TotalCourse; j++)
+    for (j = 0; j < TotalCourse; j++)
     {
-        if(strcmp(StudentID,Courses[j].StudentID) == 0)
+        if (strcmp(StudentID, Courses[j].StudentID) == 0)
         {
             CourseCount++;
-            printf(" Course %d Code: %s\n",CourseCount,Courses[j].Code);
-            printf(" Course %d Name: %s\n",CourseCount,Courses[j].Name);
+            printf(" Course %d Code: %s\n", CourseCount, Courses[j].Code);
+            printf(" Course %d Name: %s\n", CourseCount, Courses[j].Name);
         }
     }
 
@@ -451,16 +449,16 @@ void EditStudent(int StudentFoundIndex)
     int OldTotalNumberOfSubject = Students[StudentFoundIndex].NumberOfSubject;
 
     int IsValidName = 0;
-    while(!IsValidName)
+    while (!IsValidName)
     {
         printf(" Enter The New Name(0 for skip): ");
-        scanf(" %[^\n]s",&NewName);
-        if(strlen(NewName) > 20)
+        scanf(" %[^\n]s", &NewName);
+        if (strlen(NewName) > 20)
         {
             printf(" Error: Name can not be more than 20 characters.\n\n");
             IsValidName = 0;
         }
-        else if(strlen(NewName) <= 0)
+        else if (strlen(NewName) <= 0)
         {
             printf(" Error: Name can not be empty.\n\n");
             IsValidName = 0;
@@ -472,22 +470,22 @@ void EditStudent(int StudentFoundIndex)
     }
 
     int IsValidEmail = 0;
-    while(!IsValidEmail)
+    while (!IsValidEmail)
     {
         printf(" Enter The New Email(0 for skip): ");
-        scanf("%s",&NewEmail);
+        scanf("%s", &NewEmail);
 
-        if(strlen(NewEmail) > 30)
+        if (strlen(NewEmail) > 30)
         {
             printf(" Error: Email can not be more than 30 characters.\n\n");
             IsValidEmail = 0;
         }
-        else if(strlen(NewEmail) <= 0)
+        else if (strlen(NewEmail) <= 0)
         {
             printf(" Error: Email can not be empty.\n\n");
             IsValidEmail = 0;
         }
-        else if(IsAlreadyExists(NewEmail,'e',StudentID) > 0)
+        else if (IsAlreadyExists(NewEmail, 'e', StudentID) > 0)
         {
             printf(" Error: This Email Already Exists.\n\n");
             IsValidEmail = 0;
@@ -499,22 +497,22 @@ void EditStudent(int StudentFoundIndex)
     }
 
     int IsValidPhone = 0;
-    while(!IsValidPhone)
+    while (!IsValidPhone)
     {
         printf(" Enter The New Phone(0 for skip): ");
-        scanf("%s",&NewPhone);
+        scanf("%s", &NewPhone);
 
-        if(strlen(NewPhone) > 20)
+        if (strlen(NewPhone) > 20)
         {
             printf(" Error: Phone can not be more than 20 characters.\n\n");
             IsValidPhone = 0;
         }
-        else if(strlen(NewPhone) <= 0)
+        else if (strlen(NewPhone) <= 0)
         {
             printf(" Error: Phone can not be empty.\n\n");
             IsValidPhone = 0;
         }
-        else if(IsAlreadyExists(NewPhone,'p',StudentID) > 0)
+        else if (IsAlreadyExists(NewPhone, 'p', StudentID) > 0)
         {
             printf(" Error: This Phone Number is Already Exists.\n\n");
             IsValidPhone = 0;
@@ -526,12 +524,12 @@ void EditStudent(int StudentFoundIndex)
     }
 
     int IsValidNumberOfCourse = 0;
-    while(!IsValidNumberOfCourse)
+    while (!IsValidNumberOfCourse)
     {
         printf(" Number of New courses(0 for skip): ");
-        scanf("%d",&NewNumberOfSubjects);
+        scanf("%d", &NewNumberOfSubjects);
 
-        if(NewNumberOfSubjects > 4 || NewNumberOfSubjects < 0)
+        if (NewNumberOfSubjects > 4 || NewNumberOfSubjects < 0)
         {
             printf(" Error: A Student can have maximum 4 and Minimum 0 number of courses.\n\n");
             IsValidNumberOfCourse = 0;
@@ -542,32 +540,31 @@ void EditStudent(int StudentFoundIndex)
         }
     }
 
-    if(strcmp(NewName,"0") != 0)
+    if (strcmp(NewName, "0") != 0)
     {
-        strcpy(Students[StudentFoundIndex].Name,NewName);
+        strcpy(Students[StudentFoundIndex].Name, NewName);
     }
 
-    if(strcmp(NewEmail,"0") != 0)
+    if (strcmp(NewEmail, "0") != 0)
     {
-        strcpy(Students[StudentFoundIndex].Email,NewEmail);
+        strcpy(Students[StudentFoundIndex].Email, NewEmail);
     }
 
-    if(strcmp(NewPhone,"0") != 0)
+    if (strcmp(NewPhone, "0") != 0)
     {
-        strcpy(Students[StudentFoundIndex].Phone,NewPhone);
+        strcpy(Students[StudentFoundIndex].Phone, NewPhone);
     }
 
-    if(NewNumberOfSubjects != 0)
+    if (NewNumberOfSubjects != 0)
     {
         int OldTotalCourse = Students[StudentFoundIndex].NumberOfSubject;
         Students[StudentFoundIndex].NumberOfSubject = NewNumberOfSubjects;
 
-
         int FirstCourseIndex;
         int dc;
-        for(dc=0; dc<TotalCourse; dc++)
+        for (dc = 0; dc < TotalCourse; dc++)
         {
-            if(strcmp(StudentID,Courses[dc].StudentID) == 0)
+            if (strcmp(StudentID, Courses[dc].StudentID) == 0)
             {
                 FirstCourseIndex = dc; // store the index for delete
                 break;
@@ -576,30 +573,29 @@ void EditStudent(int StudentFoundIndex)
         // after every delete array index will update (decrease by one)
         // we store the courses sequential
         // so if we know the first course index and total number of course we can delete all
-        for(dc=1; dc<=OldTotalCourse; dc++)
+        for (dc = 1; dc <= OldTotalCourse; dc++)
         {
             DeleteCourseByIndex(FirstCourseIndex);
         }
 
         char CourseCode[300];
         char CourseName[300];
-        for(i=1; i<=NewNumberOfSubjects; i++)
+        for (i = 1; i <= NewNumberOfSubjects; i++)
         {
-            printf(" Enter New Course %d Code: ",i);
-            scanf("%s",&CourseCode);
+            printf(" Enter New Course %d Code: ", i);
+            scanf("%s", &CourseCode);
 
-            printf(" Enter New Course %d Name: ",i);
-            scanf(" %[^\n]s",&CourseName);
+            printf(" Enter New Course %d Name: ", i);
+            scanf(" %[^\n]s", &CourseName);
 
-            strcpy(Courses[TotalCourse].StudentID,StudentID);
-            strcpy(Courses[TotalCourse].Code,CourseCode);
-            strcpy(Courses[TotalCourse].Name,CourseName);
+            strcpy(Courses[TotalCourse].StudentID, StudentID);
+            strcpy(Courses[TotalCourse].Code, CourseCode);
+            strcpy(Courses[TotalCourse].Name, CourseName);
             TotalCourse++;
         }
     }
 
     printf(" Student Updated Successfully.\n\n");
-
 }
 
 void DeleteStudent(int StudentIndex)
@@ -608,15 +604,15 @@ void DeleteStudent(int StudentIndex)
     int FirstCourseIndexs;
     struct StudentInfo ThisStudents;
     ThisStudents = Students[StudentIndex];
-    for(d=0; d<TotalCourse; d++)
+    for (d = 0; d < TotalCourse; d++)
     {
-        if(strcmp(ThisStudents.ID,Courses[d].StudentID) == 0)
+        if (strcmp(ThisStudents.ID, Courses[d].StudentID) == 0)
         {
             FirstCourseIndexs = d;
             break;
         }
     }
-    for(d=1; d<=ThisStudents.NumberOfSubject; d++)
+    for (d = 1; d <= ThisStudents.NumberOfSubject; d++)
     {
         DeleteCourseByIndex(FirstCourseIndexs);
     }
@@ -633,68 +629,64 @@ void DeleteAllStudents()
     GoBackOrExit();
 }
 
-
 void DeleteCourseByIndex(int CourseIndex)
 {
     int c;
-    for(c=0; c<TotalCourse-1; c++)
+    for (c = 0; c < TotalCourse - 1; c++)
     {
-        if(c>=CourseIndex)
+        if (c >= CourseIndex)
         {
-            Courses[c] = Courses[c+1];
+            Courses[c] = Courses[c + 1];
         }
     }
     TotalCourse--;
-
 }
 
 void DeleteStudentByIndex(int CourseIndex)
 {
     int s;
-    for(s=0; s<TotalStudents-1; s++)
+    for (s = 0; s < TotalStudents - 1; s++)
     {
-        if(s>=CourseIndex)
+        if (s >= CourseIndex)
         {
-            Students[s] = Students[s+1];
+            Students[s] = Students[s + 1];
         }
     }
     TotalStudents--;
 }
 
-
-int IsAlreadyExists(char GivenLine[300],char InfoType, char StudentID[300])
+int IsAlreadyExists(char GivenLine[300], char InfoType, char StudentID[300])
 {
     int EmailExists = 0;
     int PhoneExists = 0;
     int IDExists = 0;
     int ep;
 
-    for(ep=0; ep<TotalStudents; ep++)
+    for (ep = 0; ep < TotalStudents; ep++)
     {
-        if(strcmp(GivenLine,Students[ep].ID) == 0)
+        if (strcmp(GivenLine, Students[ep].ID) == 0)
         {
             IDExists++;
         }
-        if(strcmp(GivenLine,Students[ep].Email) == 0 && strcmp(StudentID,Students[ep].ID) != 0 )
+        if (strcmp(GivenLine, Students[ep].Email) == 0 && strcmp(StudentID, Students[ep].ID) != 0)
         {
             EmailExists++;
         }
-        if(strcmp(GivenLine,Students[ep].Phone) == 0 && strcmp(StudentID,Students[ep].ID) != 0)
+        if (strcmp(GivenLine, Students[ep].Phone) == 0 && strcmp(StudentID, Students[ep].ID) != 0)
         {
             PhoneExists++;
         }
-
     }
 
-    if(InfoType == 'i')
+    if (InfoType == 'i')
     {
         return IDExists;
     }
-    else if(InfoType == 'e')
+    else if (InfoType == 'e')
     {
         return EmailExists;
     }
-    else if(InfoType == 'p')
+    else if (InfoType == 'p')
     {
         return PhoneExists;
     }
@@ -706,10 +698,10 @@ int IsAlreadyExists(char GivenLine[300],char InfoType, char StudentID[300])
 
 void ErrorAndRestart(char *error[100])
 {
-    printf("%s\n",error);
+    printf("%s\n", error);
     int i = 0;
     printf("Restarting the program: ");
-    for(i=0; i<10; i++)
+    for (i = 0; i < 10; i++)
     {
         printf(".");
         Sleep(500);
@@ -729,7 +721,6 @@ void UserGuideline()
     printf(" -> Student Phone can be maximum 20 characters long and unique for every students.\n");
     printf(" -> Subject code can be maximum 10 characters long.\n");
     printf(" -> Subject Name can be maximum 20 characters long.\n\n");
-
 }
 
 void GoBackOrExit()
@@ -737,8 +728,8 @@ void GoBackOrExit()
     getchar();
     char Option;
     printf(" Go back(b)? or Exit(0)?: ");
-    scanf("%c",&Option);
-    if(Option == '0')
+    scanf("%c", &Option);
+    if (Option == '0')
     {
         ExitProject();
     }
@@ -752,16 +743,16 @@ void ExitProject()
 {
     system("cls");
     int i;
-    char ThankYou[100]     = " ========= Thank You =========\n";
-    char SeeYouSoon[100]   = " ========= See You Soon ======\n";
-    for(i=0; i<strlen(ThankYou); i++)
+    char ThankYou[100] = " ========= Thank You =========\n";
+    char SeeYouSoon[100] = " ========= See You Soon ======\n";
+    for (i = 0; i < strlen(ThankYou); i++)
     {
-        printf("%c",ThankYou[i]);
+        printf("%c", ThankYou[i]);
         Sleep(40);
     }
-    for(i=0; i<strlen(SeeYouSoon); i++)
+    for (i = 0; i < strlen(SeeYouSoon); i++)
     {
-        printf("%c",SeeYouSoon[i]);
+        printf("%c", SeeYouSoon[i]);
         Sleep(40);
     }
     exit(0);
@@ -772,50 +763,49 @@ void DataSeed()
 
     //-- store some dummy data
     //-- student 1
-    strcpy(Students[0].ID,"S-1");
-    strcpy(Students[0].Name,"Student 1");
-    strcpy(Students[0].Phone,"016111111111");
-    strcpy(Students[0].Email,"student-1@gmail.com");
-    Students[0].NumberOfSubject=1;
+    strcpy(Students[0].ID, "S-1");
+    strcpy(Students[0].Name, "Student 1");
+    strcpy(Students[0].Phone, "016111111111");
+    strcpy(Students[0].Email, "student-1@gmail.com");
+    Students[0].NumberOfSubject = 1;
 
-    strcpy(Courses[0].StudentID,"S-1");
-    strcpy(Courses[0].Code,"CSE-1");
-    strcpy(Courses[0].Name,"Course - 1");
+    strcpy(Courses[0].StudentID, "S-1");
+    strcpy(Courses[0].Code, "CSE-1");
+    strcpy(Courses[0].Name, "Course - 1");
 
     //-- student 2
-    strcpy(Students[1].ID,"S-2");
-    strcpy(Students[1].Name,"Student 2");
-    strcpy(Students[1].Phone,"016111111112");
-    strcpy(Students[1].Email,"student-2@gmail.com");
-    Students[1].NumberOfSubject=2;
+    strcpy(Students[1].ID, "S-2");
+    strcpy(Students[1].Name, "Student 2");
+    strcpy(Students[1].Phone, "016111111112");
+    strcpy(Students[1].Email, "student-2@gmail.com");
+    Students[1].NumberOfSubject = 2;
 
-    strcpy(Courses[1].StudentID,"S-2");
-    strcpy(Courses[1].Code,"CSE-1");
-    strcpy(Courses[1].Name,"Course - 1");
+    strcpy(Courses[1].StudentID, "S-2");
+    strcpy(Courses[1].Code, "CSE-1");
+    strcpy(Courses[1].Name, "Course - 1");
 
-    strcpy(Courses[2].StudentID,"S-2");
-    strcpy(Courses[2].Code,"CSE-2");
-    strcpy(Courses[2].Name,"Course - 2");
-
+    strcpy(Courses[2].StudentID, "S-2");
+    strcpy(Courses[2].Code, "CSE-2");
+    strcpy(Courses[2].Name, "Course - 2");
 
     //-- student 3
-    strcpy(Students[2].ID,"S-3");
-    strcpy(Students[2].Name,"Student 3");
-    strcpy(Students[2].Phone,"016111111113");
-    strcpy(Students[2].Email,"student-3@gmail.com");
-    Students[2].NumberOfSubject=3;
+    strcpy(Students[2].ID, "S-3");
+    strcpy(Students[2].Name, "Student 3");
+    strcpy(Students[2].Phone, "016111111113");
+    strcpy(Students[2].Email, "student-3@gmail.com");
+    Students[2].NumberOfSubject = 3;
 
-    strcpy(Courses[3].StudentID,"S-3");
-    strcpy(Courses[3].Code,"CSE-1");
-    strcpy(Courses[3].Name,"Course - 1");
+    strcpy(Courses[3].StudentID, "S-3");
+    strcpy(Courses[3].Code, "CSE-1");
+    strcpy(Courses[3].Name, "Course - 1");
 
-    strcpy(Courses[4].StudentID,"S-3");
-    strcpy(Courses[4].Code,"CSE-2");
-    strcpy(Courses[4].Name,"Course - 2");
+    strcpy(Courses[4].StudentID, "S-3");
+    strcpy(Courses[4].Code, "CSE-2");
+    strcpy(Courses[4].Name, "Course - 2");
 
-    strcpy(Courses[5].StudentID,"S-3");
-    strcpy(Courses[5].Code,"CSE-3");
-    strcpy(Courses[5].Name,"Course - 3");
+    strcpy(Courses[5].StudentID, "S-3");
+    strcpy(Courses[5].Code, "CSE-3");
+    strcpy(Courses[5].Name, "Course - 3");
 
     TotalStudents = 3;
     TotalCourse = 6;
